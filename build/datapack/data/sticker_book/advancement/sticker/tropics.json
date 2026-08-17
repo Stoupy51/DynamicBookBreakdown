@@ -1,0 +1,24 @@
+{
+	"parent": "sticker_book:root",
+	"criteria": {
+		"palm": {"trigger": "minecraft:impossible"},
+		"sun": {"trigger": "minecraft:impossible"},
+		"parrot": {"trigger": "minecraft:impossible"},
+		"pineapple": {"trigger": "minecraft:impossible"},
+		"fish": {"trigger": "minecraft:impossible"},
+		"shell": {"trigger": "minecraft:impossible"},
+		"crab": {"trigger": "minecraft:impossible"},
+		"turtle": {"trigger": "minecraft:impossible"},
+		"coconut": {"trigger": "minecraft:impossible"},
+		"starfish": {"trigger": "minecraft:impossible"},
+		"hibiscus": {"trigger": "minecraft:impossible"},
+		"coral": {"trigger": "minecraft:impossible"},
+		"dolphin": {"trigger": "minecraft:impossible"},
+		"lagoon": {"trigger": "minecraft:impossible"},
+		"tiki": {"trigger": "minecraft:impossible"},
+		"wave": {"trigger": "minecraft:impossible"}
+	},
+	"rewards": {
+		"function": "sticker_book:on_spread_complete"
+	}
+}

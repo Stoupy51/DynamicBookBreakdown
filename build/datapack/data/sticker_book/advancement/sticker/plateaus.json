@@ -1,0 +1,24 @@
+{
+	"parent": "sticker_book:root",
+	"criteria": {
+		"mesa": {"trigger": "minecraft:impossible"},
+		"cactus": {"trigger": "minecraft:impossible"},
+		"hawk": {"trigger": "minecraft:impossible"},
+		"arch": {"trigger": "minecraft:impossible"},
+		"campfire": {"trigger": "minecraft:impossible"},
+		"boulder": {"trigger": "minecraft:impossible"},
+		"lizard": {"trigger": "minecraft:impossible"},
+		"tumbleweed": {"trigger": "minecraft:impossible"},
+		"canyon": {"trigger": "minecraft:impossible"},
+		"fossil": {"trigger": "minecraft:impossible"},
+		"geode": {"trigger": "minecraft:impossible"},
+		"dust_devil": {"trigger": "minecraft:impossible"},
+		"coyote": {"trigger": "minecraft:impossible"},
+		"sage": {"trigger": "minecraft:impossible"},
+		"sunset": {"trigger": "minecraft:impossible"},
+		"quarry": {"trigger": "minecraft:impossible"}
+	},
+	"rewards": {
+		"function": "sticker_book:on_spread_complete"
+	}
+}

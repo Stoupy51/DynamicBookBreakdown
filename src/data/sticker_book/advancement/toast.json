@@ -25,8 +25,5 @@
     "requirement": {
       "trigger": "minecraft:impossible"
     }
-  },
-  "rewards": {
-    "function": "sticker_book:on_sticker_found"
   }
 }

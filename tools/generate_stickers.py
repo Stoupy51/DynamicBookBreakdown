@@ -184,10 +184,14 @@ def build_textures() -> None:
 	""" Draw the placeholder slot artwork; the book, tab and arrow art is authored by hand and left alone. """
 	(RP / "textures" / "book").mkdir(parents=True, exist_ok=True)
 	Textures.locked().save(RP / "textures" / "book" / "slot_locked.png")
+	# Numbering runs across the whole book rather than restarting per spread, so flipping between
+	# two pages of placeholders is visibly a different page
+	number: int = 0
 	for spread in Data.SPREADS:
 		(RP / "textures" / "sticker" / spread.spread_id).mkdir(parents=True, exist_ok=True)
-		for slot, sticker in enumerate(spread.stickers, start=1):
-			Textures.sticker(slot, sticker.hue).save(RP / "textures" / "sticker" / spread.spread_id / f"{sticker.sticker_id}.png")
+		for sticker in spread.stickers:
+			number += 1
+			Textures.sticker(number, sticker.hue).save(RP / "textures" / "sticker" / spread.spread_id / f"{sticker.sticker_id}.png")
 
 
 def build_fonts() -> None:
@@ -302,26 +306,36 @@ def build_resource_pack_misc() -> None:
 
 
 def build_advancements() -> None:
-	""" One advancement per sticker: it is both the saved unlock flag and the toast. """
+	""" One advancement per spread, holding one criterion per sticker.
+
+	A selector can test a single criterion with advancements={ns:adv={name=true}}, so sixteen stickers
+	fit in one file instead of sixteen. The toast moves out into its own advancement, granted and revoked
+	by hand, because rewards on a multi criteria advancement only fire once every criterion is met.
+	"""
 	Data.write_json(DP / "advancement" / "root.json", {
 		"criteria": {"requirement": {"trigger": "minecraft:impossible"}},
 	})
+
+	Data.write_json(DP / "advancement" / "toast.json", {
+		"parent": "sticker_book:root",
+		"display": {
+			"title": [
+				{"translate": "gui.sticker_book.toast.background", "font": "sticker_book:toast"},
+				{"translate": "gui.sticker_book.toast.text", "font": "sticker_book:advancement_text", "color": "#4d7d9b"},
+			],
+			"icon": {"id": "minecraft:poisonous_potato", "components": {"minecraft:item_model": "sticker_book:sticker_book"}},
+			"description": "",
+			"announce_to_chat": False,
+		},
+		"criteria": {"requirement": {"trigger": "minecraft:impossible"}},
+	})
+
 	for spread in Data.SPREADS:
-		for sticker in spread.stickers:
-			Data.write_json(DP / "advancement" / "sticker" / spread.spread_id / f"{sticker.sticker_id}.json", {
-				"parent": "sticker_book:root",
-				"display": {
-					"title": [
-						{"translate": "gui.sticker_book.toast.background", "font": "sticker_book:toast"},
-						{"translate": "gui.sticker_book.toast.text", "font": "sticker_book:advancement_text", "color": "#4d7d9b"},
-					],
-					"icon": {"id": "minecraft:poisonous_potato", "components": {"minecraft:item_model": "sticker_book:sticker_book"}},
-					"description": "",
-					"announce_to_chat": False,
-				},
-				"criteria": {"requirement": {"trigger": "minecraft:impossible"}},
-				"rewards": {"function": "sticker_book:on_sticker_found"},
-			})
+		Data.write_json(DP / "advancement" / "sticker" / f"{spread.spread_id}.json", {
+			"parent": "sticker_book:root",
+			"criteria": {sticker.sticker_id: {"trigger": "minecraft:impossible"} for sticker in spread.stickers},
+			"rewards": {"function": "sticker_book:on_spread_complete"},
+		})
 
 	Data.write_json(DP / "advancement" / "all_stickers.json", {
 		"parent": "sticker_book:root",
@@ -385,7 +399,7 @@ def build_page_functions() -> None:
 			"",
 		]
 		for slot_index, sticker in enumerate(spread.stickers):
-			condition: str = f"@s[advancements={{sticker_book:sticker/{spread.spread_id}/{sticker.sticker_id}=true}}]"
+			condition: str = f"@s[advancements={{sticker_book:sticker/{spread.spread_id}={{{sticker.sticker_id}=true}}}}]"
 			component: str = slot_component(spread, sticker, spread_index, slot_index)
 			lines.append(f'execute if entity {condition} run data modify storage sticker_book:temp page.slot_{slot_index + 1} set value "{component}"')
 		lines += [
@@ -404,17 +418,24 @@ def build_const_function() -> None:
 	Data.write_text(DP / "function" / "const.mcfunction", NEWLINE.join(lines))
 
 
-def build_counting() -> None:
-	""" The total number of stickers, written where the datapack can compare against it. """
-	total: int = sum(len(spread.stickers) for spread in Data.SPREADS)
-	Data.write_text(DP / "function" / "on_sticker_found.mcfunction", "\n".join([
-		"# Run by every sticker advancement the first time it is granted, never again afterwards",
-		"scoreboard players add @s sticker_book.found 1",
-		"",
-		"playsound minecraft:entity.player.levelup player @s ~ ~ ~ 0.6 1.6",
-		"",
-		f"execute if score @s sticker_book.found matches {total}.. run advancement grant @s only sticker_book:all_stickers",
+def build_spread_complete() -> None:
+	""" Reward of every spread advancement: the book is done once each of them is. """
+	done: str = ",".join(f"sticker_book:sticker/{spread.spread_id}=true" for spread in Data.SPREADS)
+	Data.write_text(DP / "function" / "on_spread_complete.mcfunction", NEWLINE.join([
+		"# Fires when the last criterion of a spread lands, so the only thing left to check is the other spreads",
+		f"execute if entity @s[advancements={{{done}}}] run advancement grant @s only sticker_book:all_stickers",
 	]))
+
+
+def build_dev_functions() -> None:
+	""" Testing helpers, listing every sticker so a run fills a believable half of the book. """
+	Data.write_json(DP / "predicate" / "coin_flip.json", {"condition": "minecraft:random_chance", "chance": 0.5})
+
+	lines: list[str] = ["# Flip a coin per sticker, so every page lands in a different found / not found mix"]
+	for spread in Data.SPREADS:
+		for sticker in spread.stickers:
+			lines.append(f'execute if predicate sticker_book:coin_flip run function sticker_book:unlock {{spread:"{spread.spread_id}",sticker:"{sticker.sticker_id}"}}')
+	Data.write_text(DP / "function" / "dev" / "unlock_random_half.mcfunction", NEWLINE.join(lines))
 
 
 def main() -> None:
@@ -428,7 +449,8 @@ def main() -> None:
 	build_advancements()
 	build_page_functions()
 	build_const_function()
-	build_counting()
+	build_spread_complete()
+	build_dev_functions()
 	print("generated")
 
 

@@ -47,10 +47,23 @@ class Layout:
 		return pads
 
 	@staticmethod
-	def line(runs: list[Run], metrics: FontMetrics) -> list[dict[str, object]]:
+	def advance(runs: list[Run], metrics: FontMetrics) -> float:
+		""" Total advance of a composed line, which is twice the right edge of whichever run is written last.
+
+		It matters because a dialog body wraps any line wider than its `width`, and a wrapped page is a page
+		drawn twice, nine pixels apart. Writing the rightmost run first keeps the total small, which is why
+		a spread is drawn right page, jump back, left page.
+		"""
+		last: Run = runs[-1]
+		return 2 * (last.x + metrics.advance(last.text, last.bold))
+
+	@staticmethod
+	def line(runs: list[Run], metrics: FontMetrics, limit: int) -> list[dict[str, object]]:
 		""" Components for one line, alternating an offset run and the text it positions. """
 		if not runs:
 			return []
+		if (width := Layout.advance(runs, metrics)) > limit:
+			raise ValueError(f"line advances {width:.0f} past the {limit} pixel body and would wrap: {[run.text for run in runs]}")
 		out: list[dict[str, object]] = []
 		for run, pad in zip(runs, Layout.pads(runs, metrics), strict=True):
 			if (encoded := metrics.offset(int(pad))):
@@ -64,11 +77,11 @@ class Layout:
 		return out
 
 	@staticmethod
-	def page(lines: dict[int, list[Run]], metrics: FontMetrics, last_line: int) -> list[dict[str, object]]:
+	def page(lines: dict[int, list[Run]], metrics: FontMetrics, last_line: int, limit: int) -> list[dict[str, object]]:
 		""" Components for a whole page, inserting the blank lines that do the vertical spacing. """
 		out: list[dict[str, object]] = []
 		for line_number in range(1, last_line + 1):
 			if line_number > 1:
 				out.append({"text": "\n"})
-			out += Layout.line(lines.get(line_number, []), metrics)
+			out += Layout.line(lines.get(line_number, []), metrics, limit)
 		return out

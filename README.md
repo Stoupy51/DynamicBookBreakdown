@@ -17,5 +17,6 @@ Index pages are hand written in [src/data/sticker_book/](src/data/sticker_book/)
 at build time by [src/entry_pages/](src/entry_pages/), a beet plugin in the pipeline, because left aligned
 text has to be measured before it can be positioned.
 
-In game, `/function sticker_book:dev/unlock_all` and `/function sticker_book:dev/reset` drive the whole
-thing; the book is handed to every player automatically.
+In game, `/function sticker_book:dev/unlock_random_half` is the useful one: it flips a coin per sticker, so
+every page lands in a different found / not found mix. `dev/unlock_all` and `dev/reset` do what they say.
+The book is handed to every player automatically.

@@ -14,7 +14,7 @@ from PIL import Image
 from .entries import Entries, Entry
 from .metrics import FontMetrics
 from .pack import Pack
-from .render import Spread
+from .render import BODY_WIDTH, Spread
 
 # Constants
 NAMESPACE: str = "sticker_book"
@@ -144,14 +144,14 @@ def dialog_command(contents: list[dict[str, object]], page: int, last_page: int)
 	dialog: dict[str, object] = {
 		"type": "minecraft:multi_action",
 		"title": {"translate": "gui.sticker_book.title"},
-		"body": [{"type": "minecraft:plain_message", "width": 291, "contents": body}],
+		"body": [{"type": "minecraft:plain_message", "width": BODY_WIDTH, "contents": body}],
 		"inputs": [],
 		"can_close_with_escape": True,
 		"pause": False,
 		"after_action": "none",
 		"actions": [{
 			"label": {"translate": "gui.sticker_book.done"},
-			"width": 291,
+			"width": BODY_WIDTH,
 			"action": {"type": "run_command", "command": "trigger sticker_book.action set 3"},
 		}],
 	}
@@ -176,7 +176,7 @@ def build_pages(ctx: Context, metrics: FontMetrics) -> int:
 		checks: list[str] = ["# One line per variant, so nothing has to be recomputed while the book is open"]
 		for found_left, found_right in VARIANTS:
 			tests: str = " ".join(
-				("if" if found else "unless") + f" entity @s[advancements={{{NAMESPACE}:sticker/{entry.spread}/{entry.sticker_id}=true}}]"
+				("if" if found else "unless") + f" entity @s[advancements={{{NAMESPACE}:sticker/{entry.spread}={{{entry.sticker_id}=true}}}}]"
 				for entry, found in ((left, found_left), (right, found_right))
 			)
 			checks.append(f"execute {tests} run function {NAMESPACE}:page/{page}/{variant_name(found_left, found_right)}")

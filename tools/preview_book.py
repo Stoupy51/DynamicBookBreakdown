@@ -49,6 +49,12 @@ PAGE_SIZE: tuple[int, int] = (420, 260)
 PAGE_ORIGIN: tuple[int, int] = (210, 30)
 """ Where the first baseline sits on that canvas. """
 
+BODY_WIDTH: int = 291
+""" Width of the dialog body a spread is shown in.
+A line advancing past it is wrapped by the game, which draws the rest of that line nine pixels lower.
+The preview cannot show that, so it reports it instead.
+"""
+
 type Json = str | int | float | bool | list[Json] | dict[str, Json] | None
 """ Everything json.loads can hand back.
 Spelling the shape out is what lets isinstance narrow a font provider or a text component with no cast.
@@ -197,7 +203,10 @@ class Book:
 				lines[-1].append(Styled(piece, run.bold, run.color))
 
 		for line_number, line in enumerate(lines):
-			x: float = -sum(self.advance(character, run.bold) for run in line for character in run.text) / 2
+			total: float = sum(self.advance(character, run.bold) for run in line for character in run.text)
+			if total > BODY_WIDTH:
+				print(f"  line {line_number + 1} advances {total:.0f}, past the {BODY_WIDTH} pixel body: the game would wrap it")
+			x: float = -total / 2
 			y: int = LINE_HEIGHT * line_number
 			for run in line:
 				for character in run.text:

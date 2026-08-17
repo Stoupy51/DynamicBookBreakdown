@@ -36,6 +36,12 @@ VALUE_INDENT: int = 52
 LAST_LINE: int = 15
 """ Last line of the content block; navigation and tabs are appended after it. """
 
+PAGE_LINE: int = 1
+""" Line the two page images are drawn on. """
+
+BODY_WIDTH: int = 291
+""" Width of the dialog body, and therefore the advance past which a line wraps instead of overflowing. """
+
 LINES: dict[str, int] = {"heading": 2, "icon": 3, "name": 4, "subtitle": 5, "fields": 8, "description": 13}
 """ First line each part of an entry is written on.
 The icon is a line above the name because it is 26 pixels tall: starting it there makes it span the
@@ -103,17 +109,20 @@ class Spread:
 	@staticmethod
 	def contents(left: Entry, right: Entry, found_left: bool, found_right: bool, lang: dict[str, str], metrics: FontMetrics) -> list[dict[str, object]]:
 		""" Component list for one of the four found / not found variants of a page. """
-		lines: dict[int, list[Run]] = {1: [
-			Run(x=-146, text=lang["gui.sticker_book.page.entry.left"]),
-			Run(x=0, text=lang["gui.sticker_book.page.entry.right"]),
-		]}
 		halves: tuple[dict[int, list[Run]], dict[int, list[Run]]] = (
 			EntryPage.runs(left, found_left, LEFT_BOX, PAGE_CENTERS[0], lang, metrics),
 			EntryPage.runs(right, found_right, RIGHT_BOX, PAGE_CENTERS[1], lang, metrics),
 		)
+		lines: dict[int, list[Run]] = {}
 		for half in halves:
 			for line_number, runs in half.items():
 				lines.setdefault(line_number, []).extend(runs)
 		for runs in lines.values():
 			runs.sort(key=lambda run: run.x)
-		return Layout.page(lines, metrics, LAST_LINE)
+
+		# The page images go right first and then back over both, so the line advances 2 instead of 292
+		lines[PAGE_LINE] = [
+			Run(x=0, text=lang["gui.sticker_book.page.entry.right"]),
+			Run(x=-146, text=lang["gui.sticker_book.page.entry.left"]),
+		]
+		return Layout.page(lines, metrics, LAST_LINE, BODY_WIDTH)

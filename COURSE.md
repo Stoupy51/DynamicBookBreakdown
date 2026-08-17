@@ -283,57 +283,117 @@ This is the part Gneiss actually asked about: a slot that is greyed out until th
 
 ![Found and unfound slots](docs/img/slots.png)
 
-### One advancement per sticker
+### One advancement per spread, one criterion per sticker
 
-`src/data/sticker_book/advancement/sticker/tropics/palm.json`:
+The obvious shape is one advancement per sticker, and it works, but it means 32 near-identical files. It is
+also more than you need, because **an advancement can hold many criteria and a selector can test one of
+them**:
+
+```mcfunction
+execute if entity @s[advancements={minecraft:nether/all_effects={speed=true}}]
+```
+
+That is how the vanilla "How Did We Get Here" advancement is queried, and it is exactly the shape a sticker
+page wants. So the whole book is four advancement files instead of 35.
+
+`src/data/sticker_book/advancement/sticker/tropics.json`:
 
 ```json
 {
   "parent": "sticker_book:root",
-  "display": {
-    "title": [
-      {"translate": "gui.sticker_book.toast.background", "font": "sticker_book:toast"},
-      {"translate": "gui.sticker_book.toast.text", "font": "sticker_book:advancement_text", "color": "#4d7d9b"}
-    ],
-    "icon": {"id": "minecraft:poisonous_potato", "components": {"minecraft:item_model": "sticker_book:sticker_book"}},
-    "description": "",
-    "announce_to_chat": false
+  "criteria": {
+    "palm": {"trigger": "minecraft:impossible"},
+    "sun": {"trigger": "minecraft:impossible"},
+    "...": "one per sticker, sixteen of them"
   },
-  "criteria": {"requirement": {"trigger": "minecraft:impossible"}},
-  "rewards": {"function": "sticker_book:on_sticker_found"}
+  "rewards": {"function": "sticker_book:on_spread_complete"}
 }
 ```
 
-Four things at once, from one file:
+What that buys:
 
-- `minecraft:impossible` means it can never be earned by playing. It is granted by command, which makes it
-  a flag you control rather than a condition you hope fires.
-- It is saved per player, forever, with no scoreboard to maintain and nothing to reset on death.
-- `advancements={...=true}` in a selector reads it back.
-- Granting it pops a toast. And because a toast title is a text component, it can use a custom font, which
-  is how the toast gets its own artwork instead of the vanilla frame.
+- `minecraft:impossible` means no criterion can ever be earned by playing. They are granted by command,
+  which makes each one a flag you control rather than a condition you hope fires.
+- Criteria are saved per player, forever, with no scoreboard to maintain and nothing to reset on death.
+- `advancements={sticker_book:sticker/tropics={palm=true}}` reads one back.
+- With `requirements` omitted, **every criterion is required**, so the advancement completes exactly when
+  the spread is full. `rewards.function` is therefore a free "this spread is done" event.
+
+Granting a single criterion has its own command form:
+
+```mcfunction
+advancement grant @s only sticker_book:sticker/tropics palm
+```
 
 The parent `sticker_book:root` has **no `display` field at all**. An advancement tree whose root has no
-display never appears in the advancement screen. The whole 32 sticker tree is invisible in the GUI while
-still toasting normally. That is the trick that keeps a collectible system from spamming the vanilla
+display never appears in the advancement screen, so the whole thing is invisible in the GUI while still
+toasting normally. That is the trick that keeps a collectible system from spamming the vanilla
 advancement tab.
 
-`rewards.function` runs as and at the player the first time the advancement is granted, and never again:
+### What regrouping costs you
+
+One thing does not survive the merge: **the toast**. A toast fires when an advancement completes, not when
+a criterion lands, so sixteen stickers sharing one advancement would toast once, at the end.
+
+The fix is to stop getting the toast for free and grant one deliberately. `sticker_book:toast` is a single
+advancement carrying nothing but the display, and `on_sticker_found` revokes it before granting it so the
+same one can fire again:
 
 ```mcfunction
-scoreboard players add @s sticker_book.found 1
+# Revoking first is what lets the same advancement toast again on the next sticker
+advancement revoke @s only sticker_book:toast
+advancement grant @s only sticker_book:toast
+
 playsound minecraft:entity.player.levelup player @s ~ ~ ~ 0.6 1.6
-execute if score @s sticker_book.found matches 32.. run advancement grant @s only sticker_book:all_stickers
 ```
 
-That "and never again" is doing real work. It means the counter cannot double count, so there is never a
-need to recount 32 advancements to find out where the player is.
+Revoke-then-grant rather than grant-then-revoke, because the toast is queued client side when the grant
+arrives and you want the advancement to still be granted when that happens.
 
-Unlocking a sticker from anywhere else in the pack is one macro call:
+If your toast needs to name the sticker it is for, that is the point where per-sticker advancements earn
+their keep again: the toast title is a text component, so one file per sticker buys you one title per
+sticker. This book's toast just says "Sticker found!", so it does not.
+
+### The unlock path
+
+`rewards.function` no longer fires per sticker, so the guard moves into `unlock.mcfunction`, which is the
+one entry point the rest of the pack uses:
 
 ```mcfunction
-function sticker_book:unlock {sticker: "tropics/palm"}
+# function sticker_book:unlock {spread:"tropics",sticker:"palm"}
+$execute unless entity @s[advancements={sticker_book:sticker/$(spread)={$(sticker)=true}}] run function sticker_book:on_sticker_found
+$advancement grant @s only sticker_book:sticker/$(spread) $(sticker)
 ```
+
+The `unless` runs before the grant, so the toast and the sound only happen the first time. Macros substitute
+textually, which is why `$(sticker)` works inside the selector.
+
+Completion needs no counter at all. Each spread advancement completes on its own, and its reward asks
+whether the others are done too:
+
+```mcfunction
+execute if entity @s[advancements={sticker_book:sticker/tropics=true,sticker_book:sticker/plateaus=true}] run advancement grant @s only sticker_book:all_stickers
+```
+
+Note the two forms side by side: `{name=true}` tests one criterion, `=true` tests the whole advancement.
+
+### Testing it
+
+Three dev functions, and the middle one is the useful one:
+
+| Function | What it does |
+|:--|:--|
+| `sticker_book:dev/unlock_all` | `advancement grant @s from sticker_book:root`, every criterion at once |
+| `sticker_book:dev/unlock_random_half` | Flips a coin per sticker against a `random_chance` predicate |
+| `sticker_book:dev/reset` | `advancement revoke @s from sticker_book:root` |
+
+`unlock_random_half` exists because an all-or-nothing book only ever shows you two of the states. A random
+half puts every index page in a partly filled state and, more importantly, hits all four found / not found
+variants of the entry pages from Part 7 in a single run. Run it twice and the book fills in further.
+
+The placeholder stickers are numbered **across the whole book**, 01 to 32, rather than restarting at 01 on
+each spread. It is a one line change in the generator and it means flipping from one page of placeholders
+to the next is visibly a different page instead of the same eight squares again.
 
 ### Turning state into a page
 
@@ -375,13 +435,14 @@ Small, and worth reading once so nothing looks like magic.
 
 | File | Job |
 |:--|:--|
-| `load.mcfunction` | Creates the four scoreboards, sets `$max` to the page count, kicks off the one second loop |
+| `load.mcfunction` | Creates the three scoreboards, sets `$max` to the page count, kicks off the one second loop |
 | `tick.mcfunction` | Two lines: someone right clicked a book, someone clicked in a dialog |
 | `second.mcfunction` | Reschedules itself and hands the book back to anyone missing it |
 | `on_use.mcfunction` | The `used:written_book` statistic fires for *every* written book, so the held item is checked with a predicate |
 | `open.mcfunction` | Re-arms the trigger, clamps the page, plays the page turn, calls the page by number |
 | `open_page.mcfunction` | `$function sticker_book:page/$(page)/check` |
-| `dev/unlock_all` and `dev/reset` | `advancement grant @s from sticker_book:root` and its inverse |
+| `unlock.mcfunction` | The one entry point anything else calls to award a sticker |
+| `dev/` | `unlock_all`, `unlock_random_half`, `reset` |
 
 The book is given by the loop rather than on join, so losing it is self-healing and there is no join event
 to hook. A once-per-second predicate check over online players is not something you will ever see in a
@@ -391,19 +452,20 @@ profiler.
 
 ## Part 6: Adding a sticker
 
-Everything repetitive in `src/` was generated from one table so that adding a sticker stays a small change.
-By hand, one new sticker means:
+Everything repetitive in `src/` is generated from one table, so adding a sticker stays a small change. By
+hand, one new sticker means:
 
 1. A 26x26 PNG in `textures/sticker/<spread>/<id>.png`.
 2. A bitmap provider in `font/assets.json` claiming the next free `\ue1xx` character.
 3. Three lang keys: the glyph, the name, the description.
-4. An advancement in `advancement/sticker/<spread>/<id>.json`, copied from any other one.
+4. One criterion in `advancement/sticker/<spread>.json`.
 5. One `execute if entity` line in the spread's `check.mcfunction`.
-6. Bump the total in `on_sticker_found.mcfunction`.
+6. A row in the plugin's `entries.py`, so it gets an entry page too.
 
-Steps 2 through 6 are exactly the kind of thing you should stop doing by hand once the list passes about
-twenty entries. That is the point where the sticker table becomes the source of truth and a build step
-writes the rest. This pack is at 32, so it is already over that line.
+Regrouping the advancements in Part 4 deleted what used to be a seventh step, bumping a hardcoded total,
+and turned step 4 from a whole new file into a single line. Steps 2 through 6 are still exactly the kind of
+thing to stop doing by hand once the list passes about twenty entries, which is why
+`tools/generate_stickers.py` does 1 to 5 and the plugin does 6.
 
 ---
 
@@ -520,6 +582,38 @@ spread: three per page would be eight variants, four would be sixteen.
 The index pages avoid all of this because their slots are fixed width glyphs, which is why they can stay
 hand written and macro driven while entry pages cannot.
 
+### The width trap
+
+The plugin will happily compute a line that Minecraft refuses to draw. Working out the total advance of a
+composed line is worth doing once, because it has a tidy closed form: the line starts at `-W/2` and the last
+run ends at `W/2`, so
+
+```
+W = 2 * (x of the last run + its advance)
+```
+
+**The line width is twice the right edge of whatever is written last.** Draw the left page first and then
+the right, and line 1 advances `2 * (0 + 146) = 292`. The body is 291 wide. One pixel over, and
+`FocusableTextWidget` wraps the line: the left page stays on line 1, the right page moves to line 2, and the
+spread renders as two pages stacked nine pixels apart, which reads as a single page in the middle of a
+dialog full of text that has spilled off both sides of it.
+
+The fix is the order, not the arithmetic. Write the rightmost run first:
+
+```python
+lines[PAGE_LINE] = [
+    Run(x=0, text=right_page),
+    Run(x=-146, text=left_page),
+]
+```
+
+Now the last run is the left page, ending at `-146 + 147 = 1`, so `W = 2`. This is the same reason the index
+pages in Part 1 are written as right page, jump back, left page rather than the other way round: it was
+never about drawing order, it was about keeping the line narrow enough not to wrap.
+
+`Layout.line` now raises at build time when a line would exceed the body, and `preview_book.py` prints a
+warning for the same condition, since neither of them can render a wrap faithfully.
+
 ### What the plugin reads
 
 [src/entry_pages/](src/entry_pages/) does not restate anything the pack already knows. Names, descriptions,
@@ -613,10 +707,11 @@ src/
     textures/book/              pages, cover, tabs, arrows, the empty slot
     textures/sticker/           one PNG per sticker
   data/sticker_book/
-    advancement/                one file per sticker, plus the hidden root
+    advancement/                one file per spread, each holding one criterion per sticker
     function/page/1..3/         cover and index spreads: check picks the state, dialog shows it
     function/action/            the input handler behind the triggers
-    predicate/                  has the book, is holding the book
+    function/dev/               unlock_all, unlock_random_half, reset
+    predicate/                  has the book, is holding the book, coin flip
   entry_pages/                  beet plugin: pages 4 and up, the body font, the offset alphabet
   patch_json_indent.py          beet plugin: readable JSON in the build output
 tools/
