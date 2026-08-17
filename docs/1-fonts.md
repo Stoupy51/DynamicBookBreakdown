@@ -11,10 +11,10 @@ A font lives at `assets/<namespace>/font/<name>.json` and is a stack of provider
 {"providers": [ {"type": "bitmap", "...": "..."}, {"type": "reference", "id": "minecraft:include/default"} ]}
 ```
 
-**Providers are searched in order and the first match wins.** Everything after the first provider that
-defines a character is a fallback for characters it did not define. Put your glyphs first, vanilla last.
+**Providers are searched in order and the first match wins**, so everything after a match is a fallback for
+characters it did not define. Put your glyphs first, vanilla last.
 
-Reference it from any text component, and every nested component inherits it:
+Name it on any text component and every nested component inherits it:
 
 ```json
 {"translate": "gui.sticker_book.page.spread", "font": "sticker_book:assets"}
@@ -49,10 +49,9 @@ Reference it from any text component, and every nested component inherits it:
 | `height` | How tall a cell is drawn, in pixels. Defaults to 8. Width follows the aspect ratio |
 | `ascent` | How far above the baseline the top of the glyph sits. Must not exceed `height`, or the pack fails to load |
 
-The image is divided by the shape of `chars`, not by any declared cell size. A 128x128 PNG with sixteen
-rows of sixteen characters gives 8x8 cells. `height` then rescales those cells: this page is a 146x195 PNG
-in a 1x1 grid at `height: 195`, so it draws at native size. Set `height: 390` and it draws at 292x390,
-blurry.
+The image is divided by the shape of `chars`, not by any declared cell size: a 128x128 PNG with sixteen rows
+of sixteen characters gives 8x8 cells. `height` then rescales them. This page is a 146x195 PNG in a 1x1 grid
+at `height: 195`, so it draws at native size; `height: 390` would draw it at 292x390, blurry.
 
 `ascent` is where the glyph hangs from. Positive lifts it above the baseline, negative drops it below.
 
@@ -88,9 +87,9 @@ The one number that is not in the JSON: how far the cursor moves after drawing. 
 - `actualGlyphWidth` is one past the **rightmost column of the cell holding a non transparent pixel**.
 - Bold adds one more pixel per glyph (`GlyphInfo.getBoldOffset`).
 
-That trimming is the source of most off-by-a-few font bugs. A sticker slot is a 26x26 PNG whose art stops
-at column 24, so it advances **25, not 27**. Assuming the image width pulls every row two pixels per slot
-toward the spine, eight across a spread, on a page nobody thought to measure.
+That trimming causes most off-by-a-few font bugs. A sticker slot is a 26x26 PNG whose art stops at column
+24, so it advances **25, not 27**. Assuming the image width pulls every row two pixels per slot toward the
+spine, eight across a spread.
 
 **A glyph advances by its trimmed width plus one, not by its image width.**
 
@@ -100,9 +99,9 @@ toward the spine, eight across a spread, on a page nobody thought to measure.
 {"type": "space", "advances": {"\ud000": -292, "\ud001": 47}}
 ```
 
-Characters that draw nothing and move the cursor by exactly the value given. No image, no `+1`. Negative
-values move it backwards, which is what lets you draw two things on top of each other, or draw the right
-page first and then back up for the left one.
+Characters that draw nothing and move the cursor by exactly that value. No image, no `+1`. Negative values
+move it backwards, which is what lets you draw two things on top of each other, or draw the right page first
+and then back up for the left one.
 
 Positive spaces are padding. Negative spaces are the interesting half.
 
@@ -112,9 +111,9 @@ Positive spaces are padding. Negative spaces are the interesting half.
 {"type": "reference", "id": "minecraft:include/space"}
 ```
 
-Splices another font's providers in at that point in the stack. Two are worth knowing:
-`minecraft:include/space` gives you U+0020 as a real 4 pixel space (without it the space is an empty glyph
-that advances 1), and `minecraft:include/default` gives you the whole vanilla font as a fallback.
+Splices another font's providers in at that point in the stack. `minecraft:include/space` gives U+0020 as a
+real 4 pixel space (without it, a space is an empty glyph advancing 1), and `minecraft:include/default`
+gives the whole vanilla font as a fallback.
 
 ## Gotchas
 

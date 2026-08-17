@@ -89,11 +89,11 @@ The locked page is built once at load time in `const.mcfunction`, so the common 
 instead of sixteen.
 
 Each slot value is a **text component stored as a string**, pasted in raw by macro substitution. Two rules
-keep that working: single quotes inside, because the outer NBT string uses double quotes, and never a
-newline. The two line tooltip gets its newline from the lang file
-(`"gui.sticker_book.tooltip": "%1$s\n%2$s"`) so the stored string stays flat.
+keep that working: single quotes inside, since the outer NBT string uses double quotes, and never a newline.
+The two line tooltip takes its newline from the lang file (`"gui.sticker_book.tooltip": "%1$s\n%2$s"`) so the
+stored string stays flat.
 
-Sixteen `execute if entity` checks per open is nothing: once, on one player, never on the tick loop.
+Sixteen `execute if entity` per open is nothing: once, on one player, never on the tick loop.
 
 ## Testing it
 

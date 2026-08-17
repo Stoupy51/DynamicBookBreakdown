@@ -78,9 +78,9 @@ Why the lang file:
 
 ## Iterating without launching the game
 
-`tools/preview_book.py` implements the rules above, reads the real font and lang files, and writes a PNG.
+`tools/preview_book.py` implements the rules above against the real font and lang files and writes a PNG.
 Every rendered image in this course came out of it, which makes each one a test: it re-derives the advances
-from the same PNGs the game reads, so wrong geometry shows up as a wrong picture.
+from the PNGs the game reads, so wrong geometry shows up as a wrong picture.
 
 ```sh
 python tools/preview_book.py docs/img

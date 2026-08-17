@@ -29,11 +29,11 @@ By hand, one new sticker is six edits:
 5. One `execute if entity` line in the spread's `check.mcfunction`.
 6. A row in `entries.py`, so it gets an entry page too.
 
-Steps 2 to 6 are exactly what to stop doing by hand past about twenty entries, which is why
-`tools/generate_stickers.py` owns 1 to 5 and the plugin from Part 6 owns 6. Both read one table, so a new
-sticker is one row plus a rebuild.
+Past about twenty entries, stop. `tools/generate_stickers.py` owns steps 1 to 5, the generator from Part 6
+owns step 6, and both read one table, so a new sticker is one row plus a rebuild. `generate_stickers.py` is
+a plain script writing files into `src/`: run it, read the diff, commit it.
 
-The advancement regrouping in Part 4 paid off here: step 4 used to be a whole new file, and there used to be
-a seventh step bumping a hardcoded total.
+The regrouping in Part 4 paid off here. Step 4 used to be a whole new file, and there used to be a seventh
+step bumping a hardcoded total.
 
 Next: [Part 6: Entry pages](6-entry-pages.md).

@@ -37,15 +37,19 @@ src/
     function/action/            the input handler behind the triggers
     function/dev/               unlock_all, unlock_random_half, reset
     predicate/                  has the book, is holding the book, coin flip
-  entry_pages/                  beet plugin: pages 4 and up, the body font, the offset alphabet
-  patch_json_indent.py          beet plugin: readable JSON in the build output
+  entry_pages/                  generator: pages 4 and up, the body font, the offset alphabet
+  patch_json_indent.py          readable JSON in the build output
 tools/
   generate_stickers.py          rewrites the derived half of src/ from the sticker table
   preview_book.py               renders any page to PNG, from src/ or from build/
 ```
 
-Pipeline order in `beet.yml` matters: `src.entry_pages` runs after `mecha`, so the hand written functions
-are already in `ctx.data`, and before the stewbeet plugins that package the result.
+`assets/` and `data/` are an ordinary resource pack and datapack, and come back out that way in `build/`.
+Only `entry_pages/` and `patch_json_indent.py` are beet plugins.
+
+Porting it, the one thing to reproduce is the order: entry pages are generated after the hand written
+functions are read and before the packs are zipped. Any build with a "read, add files, write" step in the
+middle has that shape.
 
 ## Credits
 
@@ -53,4 +57,4 @@ The artwork, the book layout and the original implementation are from the Smithe
 repository reimplements the mechanism under its own namespace, with placeholder sticker art, so it can be
 read and modified without the rest of Summit.
 
-Back to [the course index](../COURSE.md).
+Back to [the index](../README.md).
