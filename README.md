@@ -4,9 +4,9 @@
 A book whose pages fill in as the player finds things,
 built out of a font, a dialog and a handful of advancements.
 
-![The cover](docs/img/cover.png)
+![The cover](docs/img/dialog_window.png)
 
-![A spread, eight of sixteen stickers found](docs/img/tropics.png)
+![A spread, eight of sixteen stickers found](docs/img/tooltip.png)
 
 This repository is a self-contained rebuild of the Smithed Summit sticker book, stripped of everything
 Summit specific and extended into a field guide: a cover, two index spreads of sixteen slots each, and one
