@@ -1,6 +1,8 @@
 # Part 3: The dialog
 
-A page is one `dialog show` holding one text component. Turning a page is showing the dialog again.
+A page is one [`dialog show`](https://minecraft.wiki/w/Commands/dialog) holding one text component. Turning
+a page is showing the dialog again. Reference: [Dialog](https://minecraft.wiki/w/Dialog) for the fields
+below.
 
 ![The cover page in game](img/dialog_window.png)
 
@@ -31,8 +33,9 @@ $dialog show @s { \
 
 ## Every click goes through a trigger
 
-A click event inside the body runs its command **as the player**, at permission level 0. It cannot run
-`function` and it cannot run `dialog`. It can run `trigger`.
+A [click event](https://minecraft.wiki/w/Text_component_format#Click_events) inside the body runs its
+command **as the player**, at permission level 0. It cannot run `function` and it cannot run `dialog`. It
+can run [`trigger`](https://minecraft.wiki/w/Commands/trigger).
 
 So every clickable thing in the book sets a number:
 
@@ -71,7 +74,8 @@ Change the page number, call `open` again, `open` shows the dialog again. Minecr
 window rather than stacking a second one, so from the player's side it reads as a page turn. `open` also
 re-arms the trigger, clamps the page against `$max` and plays the page turn sound.
 
-Hover events come free with the same component, and are where the slot names live:
+[Hover events](https://minecraft.wiki/w/Text_component_format#Hover_events) come free with the same
+component, and are where the slot names live:
 
 ![A slot tooltip, name over description](img/tooltip.png)
 

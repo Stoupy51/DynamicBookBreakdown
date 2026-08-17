@@ -22,6 +22,7 @@ pipeline:
     - "mecha"
     - "src.entry_pages"
     - "src.patch_json_indent"
+    # Utility plugin from StewBeet for making mcfunction files more readable
     - "stewbeet.plugins.auto.headers.silent"
     # Zip and copy the datapack and resource pack to copy destinations
     - "stewbeet.plugins.archive.silent"

@@ -1,13 +1,15 @@
 # Part 4: Player state
 
 A slot is greyed out until the player finds the thing. That state is four advancement files and one macro.
+Reference: [Advancement definition](https://minecraft.wiki/w/Advancement_definition).
 
 ![Found and unfound slots](img/slots.png)
 
 ## One advancement per spread, one criterion per sticker
 
 One advancement per sticker works and means 32 near identical files. It is also more than you need, because
-**an advancement holds many criteria and a selector can test one of them**:
+**an advancement holds many criteria and a
+[selector can test one of them](https://minecraft.wiki/w/Target_selectors#Selecting_targets_by_advancements)**:
 
 ```mcfunction
 execute if entity @s[advancements={sticker_book:sticker/tropics={palm=true}}]
@@ -60,8 +62,9 @@ $execute unless entity @s[advancements={sticker_book:sticker/$(spread)={$(sticke
 $advancement grant @s only sticker_book:sticker/$(spread) $(sticker)
 ```
 
-The `unless` runs before the grant, so the toast and the sound only happen the first time. Macros substitute
-textually, which is why `$(sticker)` works inside a selector.
+The `unless` runs before the grant, so the toast and the sound only happen the first time.
+[Macros](https://minecraft.wiki/w/Function_(Java_Edition)#Macros) substitute textually, which is why
+`$(sticker)` works inside a selector.
 
 Completion needs no counter. Each spread completes on its own and its reward asks about the others:
 

@@ -14,15 +14,16 @@ entry page per pair of stickers. Slots are greyed out until found, and clicking 
 
 ## The three ideas
 
-**A font is a layout engine.** A resource pack font maps characters to images and to horizontal offsets,
-and offsets are allowed to be negative. "Draw this image, move back 292 pixels, draw that one" is an
-ordinary string. Once the cursor goes anywhere, a paragraph is a canvas.
+**A [font](https://minecraft.wiki/w/Font) is a layout engine.** A resource pack font maps characters to
+images and to horizontal offsets, and offsets are allowed to be negative. "Draw this image, move back 292
+pixels, draw that one" is an ordinary string. Once the cursor goes anywhere, a paragraph is a canvas.
 
-**A book is a dialog.** Since 1.21.6 a datapack can push a window onto the player's screen with
-`dialog show`. It holds text, and text holds click and hover events. That is the entire interface budget.
+**A book is a [dialog](https://minecraft.wiki/w/Dialog).** Since 1.21.6 a datapack can push a window onto
+the player's screen with `dialog show`. It holds text, and text holds click and hover events. That is the
+entire interface budget.
 
-**An advancement is a save file.** Per player, survives restarts, queryable from a selector, toasts for
-free. That is where "this player found the parrot" lives.
+**An [advancement](https://minecraft.wiki/w/Advancement_definition) is a save file.** Per player, survives
+restarts, queryable from a selector, toasts for free. That is where "this player found the parrot" lives.
 
 ## The course
 
@@ -41,18 +42,18 @@ the generated half.
 
 ## You do not need beet to read this
 
-It is all plain datapack and resource pack: `.mcfunction` files, a font JSON, a lang file, advancement JSON.
+It is all plain datapack and resource pack (output in build/): `.mcfunction` files, a font JSON, a lang file, advancement JSON.
 beet and stewbeet only assemble it, which is why `src/` is one merged tree instead of two packs.
 
 | Here | In a plain pack |
 |:--|:--|
 | `src/data/sticker_book/` | `<datapack>/data/sticker_book/` |
 | `src/assets/sticker_book/` | `<resourcepack>/assets/sticker_book/` |
-| `src/entry_pages/` | A script that writes more functions and lang entries before you zip |
-| `build/datapack/`, `build/resourcepack/` | The finished packs, ready to drop into a world |
+| `src/entry_pages/` | A script that writes more functions and lang entries |
+| `build/datapack/`, `build/resourcepack/` | The finished packs, ready to drop into a world (and their .zips) |
 
-The toolchain only matters in Part 6, where pages must be computed before the pack ships. That needs *a*
-generator, not this one.
+The toolchain only matters in Part 6, where pages must be computed before the pack ships.
+That needs *a* generator, not this one.
 
 ## Running it
 

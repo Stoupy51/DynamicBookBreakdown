@@ -48,14 +48,16 @@ Had we used 27 instead of 25 here, every row would sit eight pixels off across t
 ## The lang file is the layout
 
 You could put the whole page into the `dialog` command as one run of private use characters. Put it in the
-lang file instead, and keep the command holding only what changes.
+[lang file](https://minecraft.wiki/w/Resource_pack#Language) instead, and keep the command holding only
+what changes.
 
 ```json
 "gui.sticker_book.page.spread": "%1$s\ud000%2$s\n\n\n\n%3$s\ud001%4$s\n\n\n\n\n\n%5$s\ud001%6$s\n\n\n\n\n%7$s\n%8$s\n\n\n\n",
 "gui.sticker_book.row": "%1$s%2$s%3$s%4$s"
 ```
 
-A `translate` component fills `%1$s` and friends from its `with` list. Read the template as a grid:
+A [`translate` component](https://minecraft.wiki/w/Text_component_format) fills `%1$s` and friends from its
+`with` list. Read the template as a grid:
 
 | Line | Content | What it is |
 |:--|:--|:--|

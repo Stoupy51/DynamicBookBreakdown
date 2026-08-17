@@ -1,7 +1,9 @@
+
 # Part 1: Fonts
 
 Everything in this book is one font doing the drawing. This part is the vocabulary: what a provider is,
-what `height` and `ascent` do, and where the advance comes from.
+what `height` and `ascent` do, and where the advance comes from. Reference:
+[Font](https://minecraft.wiki/w/Font) on the wiki.
 
 ## A font is a list of providers
 
@@ -14,21 +16,22 @@ A font lives at `assets/<namespace>/font/<name>.json` and is a stack of provider
 **Providers are searched in order and the first match wins**, so everything after a match is a fallback for
 characters it did not define. Put your glyphs first, vanilla last.
 
-Name it on any text component and every nested component inherits it:
+Name it on any [text component](https://minecraft.wiki/w/Text_component_format):
 
 ```json
 {"translate": "gui.sticker_book.page.spread", "font": "sticker_book:assets"}
+{"text": "\ud000", "font": "sticker_book:assets"}
 ```
 
 ## The five types
 
 | Type | What it does |
 |:--|:--|
-| `bitmap` | A PNG cut into a grid of cells, one character per cell. The one this pack uses |
-| `space` | Characters that draw nothing and move the cursor by an exact number of pixels |
-| `reference` | Splices another font's providers in at this position |
-| `ttf` | A real font file, with size, oversampling and a shift |
-| `unihex` | A GNU unifont zip, how vanilla ships CJK |
+| [`bitmap`](https://minecraft.wiki/w/Font#Bitmap_provider) | A PNG cut into a grid of cells, one character per cell. The one this pack uses |
+| [`space`](https://minecraft.wiki/w/Font#Space_provider) | Characters that draw nothing and move the cursor by an exact number of pixels |
+| [`reference`](https://minecraft.wiki/w/Font#Reference_provider) | Splices another font's providers in at this position |
+| [`ttf`](https://minecraft.wiki/w/Font#TTF_provider) | A real font file, with size, oversampling and a shift |
+| [`unihex`](https://minecraft.wiki/w/Font#Unihex_provider) | A GNU unifont zip, how vanilla ships CJK |
 
 ## Bitmap providers
 
@@ -77,7 +80,9 @@ under the page.
 
 ## The advance
 
-The one number that is not in the JSON: how far the cursor moves after drawing. From `BitmapProvider`:
+The one number that is not in the JSON: how far the cursor moves after drawing. The wiki says the width is
+"automatically determined based on the last right-most column of pixels containing any alpha value above 0";
+`BitmapProvider` says exactly how:
 
 ```java
 (int)(0.5 + actualGlyphWidth * pixelScale) + 1
@@ -119,10 +124,12 @@ gives the whole vanilla font as a fallback.
 
 - **Pick characters from the private use area**, `U+E000` to `U+F8FF`, so nothing a player types collides
   with a glyph. This pack uses `\ue000` and up for page art, `\ue1xx` for stickers.
-- **Drop shadow doubles every image.** Set `shadow_color: 0` on the component or every page is drawn twice,
-  one pixel apart, in black.
+- **Drop shadow doubles every image.** Set
+  [`shadow_color: 0`](https://minecraft.wiki/w/Text_component_format) on the component or every page is
+  drawn twice, one pixel apart, in black.
 - **First match wins.** A provider added after `minecraft:include/default` is never reached for a character
   vanilla already defines.
 - **Duplicate characters warn and lose.** Declaring a codepoint twice logs a warning and keeps the last one.
 
 Next: [Part 2: Drawing a page](2-drawing-a-page.md), where these turn into an actual layout.
+
