@@ -2,7 +2,7 @@
 
 A page is one `dialog show` holding one text component. Turning a page is showing the dialog again.
 
-![Screenshot wanted: the dialog window in game](img/todo/dialog_window.png)
+![The cover page in game](img/dialog_window.png)
 
 ## The command
 
@@ -27,7 +27,7 @@ $dialog show @s { \
 | `shadow_color: 0` | Kills the drop shadow. Without it every page image is drawn twice, one pixel apart, in black |
 | `width: 291` | The wrapping width of the body, not the window width. The window is sized by the widest action button, which is why the cover uses 211 |
 | `pause: false` | Matters on a server |
-| `after_action: 'none'` | Stops the Done button closing the window on its own, because we close it ourselves |
+| `after_action: 'none'` | Stops the Close button closing the window on its own, because we close it ourselves |
 
 ## Every click goes through a trigger
 
@@ -73,6 +73,6 @@ re-arms the trigger, clamps the page against `$max` and plays the page turn soun
 
 Hover events come free with the same component, and are where the slot names live:
 
-![Screenshot wanted: a slot tooltip](img/todo/tooltip.png)
+![A slot tooltip, name over description](img/tooltip.png)
 
 Next: [Part 4: Player state](4-player-state.md).

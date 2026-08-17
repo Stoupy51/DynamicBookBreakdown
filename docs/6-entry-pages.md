@@ -3,7 +3,7 @@
 Everything so far was made of glyphs whose width you already knew. Text is different, and that difference is
 what forces a build step.
 
-![An entry spread, one side found and one side not](img/entry_ff.png)
+![An entry spread, both halves found](img/entry_ff.png)
 
 A heading centred on each page, an icon, a name beside it, four label and value pairs in two columns, and a
 wrapped paragraph. Six of those seven are left aligned, and a dialog body centres every line on its own
@@ -84,9 +84,8 @@ W = 2 * (x of the last run + its advance)
 
 **The line width is twice the right edge of whatever is written last.** Draw the left page then the right,
 and line 1 advances `2 * (0 + 146) = 292` against a body 291 wide. One pixel over, and `FocusableTextWidget`
-wraps it: left page on line 1, right page on line 2, stacked nine pixels apart.
-
-![Screenshot wanted: the wrapping bug](img/todo/wrap_bug.png)
+wraps it: left page on line 1, right page on line 2, stacked nine pixels apart, which reads in game as a
+single page with content spilling off both sides.
 
 The fix is the order, not the arithmetic. Write the rightmost run first:
 
@@ -121,7 +120,7 @@ Three things connect it back to the hand written half:
   component moved from one shared value in `const.mcfunction` to one per slot: a shared component cannot
   carry a per-slot click event.
 
-![Screenshot wanted: an entry page in game](img/todo/entry_spread.png)
+![An entry spread in game, one side found and one side not](img/entry_spread.png)
 
 ## What you give up
 

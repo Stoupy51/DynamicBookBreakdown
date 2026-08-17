@@ -31,6 +31,3 @@ In game, `/function sticker_book:dev/unlock_random_half` is the useful one: it f
 every page lands in a different found / not found mix. `dev/unlock_all` and `dev/reset` do what they say.
 The book is handed to every player automatically.
 
-`docs/img/todo/` holds placeholders for the screenshots the course still wants. Each one names what to
-capture and how to reproduce it in game.
-

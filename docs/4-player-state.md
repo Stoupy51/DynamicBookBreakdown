@@ -48,7 +48,7 @@ Revoke then grant, not the other way round: the toast is queued client side when
 toast needs to name its sticker, that is where per-sticker advancements earn their keep again, since a title
 is a text component.
 
-![Screenshot wanted: the toast](img/todo/toast.png)
+![The toast, on its own font strip](img/toast.png)
 
 ## The unlock path
 
