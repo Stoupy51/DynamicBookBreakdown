@@ -13,6 +13,9 @@ require:
 data_pack:
     name: "datapack"
     load: ["src"]
+resource_pack:
+    name: "resourcepack"
+    load: ["src"]
 
 pipeline:
     - "mecha"
