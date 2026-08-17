@@ -20,6 +20,7 @@ resource_pack:
 
 pipeline:
     - "mecha"
+    - "src.entry_pages"
     - "src.patch_json_indent"
     - "stewbeet.plugins.auto.headers.silent"
     - "stewbeet.plugins.archive.silent"

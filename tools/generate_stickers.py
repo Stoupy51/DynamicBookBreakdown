@@ -38,6 +38,12 @@ DIGITS: dict[str, list[str]] = {
 }
 """ Tiny 3x5 pixel font used to number the placeholder stickers. """
 
+SLOTS_PER_SPREAD: int = 16
+""" Slots on one spread, which is what turns a slot into its index in the whole book. """
+
+NEWLINE: str = chr(10)
+""" Line separator, named so the f-string heavy builders below stay readable. """
+
 
 # Classes
 @dataclass(frozen=True)
@@ -109,7 +115,10 @@ class Data:
 	""" Every spread of the book, in page order. """
 
 	SPACES: ClassVar[list[int]] = [-292, 38, 204, 17, 112, 128, 80]
-	""" Space advances, in the order the \\ud000+n characters are assigned. """
+	""" Space advances, in the order the \\ud000+n characters are assigned.
+	The row gutter is 47 because a 26 pixel slot advances 25, not 27: Minecraft trims the transparent
+	columns of a glyph before adding its one pixel of padding.
+	"""
 
 	@staticmethod
 	def sticker_char(spread_index: int, slot_index: int) -> str:
@@ -328,12 +337,23 @@ def build_advancements() -> None:
 	})
 
 
-def slot_component(spread: Spread, sticker: Sticker) -> str:
+def entry_action(spread_index: int, slot_index: int) -> int:
+	""" Trigger value a slot sends to open its own entry page, matching ENTRY_ACTION_BASE in the plugin. """
+	return 100 + spread_index * SLOTS_PER_SPREAD + slot_index
+
+
+def click_to_entry(spread_index: int, slot_index: int) -> str:
+	""" Click event opening the entry page of one slot, whether or not it has been found. """
+	return f"click_event:{{action:'run_command',command:'trigger sticker_book.action set {entry_action(spread_index, slot_index)}'}}"
+
+
+def slot_component(spread: Spread, sticker: Sticker, spread_index: int, slot_index: int) -> str:
 	""" Text component of an unlocked slot, stored as a macro friendly single quoted string. """
 	key: str = f"{spread.spread_id}.{sticker.sticker_id}"
 	return (
 		"{"
 		f"translate:'gui.sticker_book.sticker.{key}',"
+		f"{click_to_entry(spread_index, slot_index)},"
 		"hover_event:{action:'show_text',value:{translate:'gui.sticker_book.tooltip',with:["
 		f"{{translate:'sticker.sticker_book.{key}',color:'gold'}},"
 		f"{{translate:'sticker.sticker_book.{key}.desc',color:'gray'}}"
@@ -342,40 +362,46 @@ def slot_component(spread: Spread, sticker: Sticker) -> str:
 	)
 
 
-def build_page_functions() -> None:
-	""" Per page check functions, which decide the state of every slot before showing the dialog. """
-	for spread in Data.SPREADS:
-		lines: list[str] = [
-			"# Start from a fully locked page, then reveal only what this player has already found",
-			"data modify storage sticker_book:temp page set from storage sticker_book:const locked_page",
-			"",
-		]
-		for slot, sticker in enumerate(spread.stickers, start=1):
-			condition: str = f"@s[advancements={{sticker_book:sticker/{spread.spread_id}/{sticker.sticker_id}=true}}]"
-			lines.append(f'execute if entity {condition} run data modify storage sticker_book:temp page.slot_{slot} set value "{slot_component(spread, sticker)}"')
-		lines += [
-			"",
-			f"function sticker_book:page/{spread.page}/dialog with storage sticker_book:temp page",
-		]
-		Data.write_text(DP / "function" / "page" / str(spread.page) / "check.mcfunction", "\n".join(lines))
-
-
-def build_const_function() -> None:
-	""" Load time storage holding the locked slot component, copied into every page. """
-	locked: str = (
+def locked_component(spread_index: int, slot_index: int) -> str:
+	""" Text component of a slot nobody has filled yet, still clickable so the entry can be read. """
+	return (
 		"{"
 		"translate:'gui.sticker_book.slot.locked',"
+		f"{click_to_entry(spread_index, slot_index)},"
 		"hover_event:{action:'show_text',value:{translate:'gui.sticker_book.tooltip',with:["
 		"{translate:'gui.sticker_book.slot.locked.name',color:'dark_gray'},"
 		"{translate:'gui.sticker_book.slot.locked.hover',color:'gray'}"
 		"]}}"
 		"}"
 	)
-	slots: str = ",".join(f'slot_{index}:"{locked}"' for index in range(1, 17))
-	Data.write_text(DP / "function" / "const.mcfunction", "\n".join([
-		"# Every slot of a page starts locked, so a page check only has to overwrite the ones that are unlocked",
-		f"data modify storage sticker_book:const locked_page set value {{{slots}}}",
-	]))
+
+
+def build_page_functions() -> None:
+	""" Per page check functions, which decide the state of every slot before showing the dialog. """
+	for spread_index, spread in enumerate(Data.SPREADS):
+		lines: list[str] = [
+			"# Start from a fully locked page, then reveal only what this player has already found",
+			f"data modify storage sticker_book:temp page set from storage sticker_book:const locked_{spread.spread_id}",
+			"",
+		]
+		for slot_index, sticker in enumerate(spread.stickers):
+			condition: str = f"@s[advancements={{sticker_book:sticker/{spread.spread_id}/{sticker.sticker_id}=true}}]"
+			component: str = slot_component(spread, sticker, spread_index, slot_index)
+			lines.append(f'execute if entity {condition} run data modify storage sticker_book:temp page.slot_{slot_index + 1} set value "{component}"')
+		lines += [
+			"",
+			f"function sticker_book:page/{spread.page}/dialog with storage sticker_book:temp page",
+		]
+		Data.write_text(DP / "function" / "page" / str(spread.page) / "check.mcfunction", NEWLINE.join(lines))
+
+
+def build_const_function() -> None:
+	""" Load time storage holding one fully locked page per spread, copied in whole on every open. """
+	lines: list[str] = ["# A page starts fully locked, so a page check only overwrites the slots that are unlocked"]
+	for spread_index, spread in enumerate(Data.SPREADS):
+		slots: str = ",".join(f'slot_{slot_index + 1}:"{locked_component(spread_index, slot_index)}"' for slot_index in range(len(spread.stickers)))
+		lines.append(f"data modify storage sticker_book:const locked_{spread.spread_id} set value {{{slots}}}")
+	Data.write_text(DP / "function" / "const.mcfunction", NEWLINE.join(lines))
 
 
 def build_counting() -> None:

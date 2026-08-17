@@ -10,3 +10,12 @@ dependencies = [
 [tool.uv]
 package = false
 
+[dependency-groups]
+dev = [
+    "pyright>=1.1.411",
+]
+
+[tool.pyright]
+include = ["src", "tools"]
+typeCheckingMode = "strict"
+

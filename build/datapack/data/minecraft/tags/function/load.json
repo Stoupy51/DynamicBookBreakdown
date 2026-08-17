@@ -1,5 +1,6 @@
 {
 	"values": [
-		"sticker_book:load"
+		"sticker_book:load",
+		"sticker_book:entry/load"
 	]
 }

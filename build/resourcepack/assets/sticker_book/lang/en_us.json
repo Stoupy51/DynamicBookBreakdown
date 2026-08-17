@@ -135,5 +135,7 @@
 	"gui.sticker_book.sticker.plateaus.quarry": "\ue12f",
 	"sticker.sticker_book.plateaus.quarry": "Old Quarry",
 	"sticker.sticker_book.plateaus.quarry.desc": "Half a mountain, moved by hand.",
-	"subtitles.sticker_book.section_flip": "Multiple pages turn"
+	"subtitles.sticker_book.section_flip": "Multiple pages turn",
+	"gui.sticker_book.page.entry.left": "\ue005",
+	"gui.sticker_book.page.entry.right": "\ue006"
 }
