@@ -23,11 +23,12 @@ pipeline:
     - "src.entry_pages"
     - "src.patch_json_indent"
     - "stewbeet.plugins.auto.headers.silent"
+    # Zip and copy the datapack and resource pack to copy destinations
     - "stewbeet.plugins.archive.silent"
     - "stewbeet.plugins.copy_to_destination.silent"
 
 meta:
-    # StewBeet equivalent to "beet link" but copy zips instead
+    # StewBeet's equivalent to "beet link" but copy zips instead
     stewbeet:
         build_copy_destinations:
             datapack: ["D:/minecraft/latest/saves/Breakdown/datapacks"]

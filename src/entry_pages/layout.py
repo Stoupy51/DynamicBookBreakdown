@@ -85,3 +85,4 @@ class Layout:
 				out.append({"text": "\n"})
 			out += Layout.line(lines.get(line_number, []), metrics, limit)
 		return out
+

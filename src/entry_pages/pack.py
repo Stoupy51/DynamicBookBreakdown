@@ -84,3 +84,4 @@ class Pack:
 		""" Append a function to #minecraft:load, after everything already listed there. """
 		values: list[str] = ctx.data.function_tags["minecraft:load"].data["values"]
 		values.append(function)
+

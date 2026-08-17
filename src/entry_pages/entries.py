@@ -84,3 +84,4 @@ class Entries:
 		Entry(spread="plateaus", sticker_id="quarry",     found_in="Old workings", kind=Kinds.MADE,    family="Fossoria",      genus="Lapicidina"),
 	]
 	""" One row per sticker, in the exact order the slots appear in the index pages. """
+

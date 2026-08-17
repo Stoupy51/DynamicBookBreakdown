@@ -126,3 +126,4 @@ class Spread:
 			Run(x=-146, text=lang["gui.sticker_book.page.entry.left"]),
 		]
 		return Layout.page(lines, metrics, LAST_LINE, BODY_WIDTH)
+
