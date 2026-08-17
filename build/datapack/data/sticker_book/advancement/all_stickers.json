@@ -1,0 +1,16 @@
+{
+	"parent": "sticker_book:root",
+	"display": {
+		"title": {"translate": "advancements.sticker_book.all_stickers.title"},
+		"description": {"translate": "advancements.sticker_book.all_stickers.description"},
+		"icon": {"id": "minecraft:poisonous_potato","components": {"minecraft:item_model": "sticker_book:sticker_book"}},
+		"frame": "challenge",
+		"announce_to_chat": false
+	},
+	"criteria": {
+		"requirement": {"trigger": "minecraft:impossible"}
+	},
+	"rewards": {
+		"function": "sticker_book:on_book_complete"
+	}
+}

@@ -7,6 +7,7 @@ output: "build"
 
 # A list of importable plugin strings
 require:
+    - "stewbeet"
     - "bolt"
 
 # Takes a nested pack config, see PackConfig() documentation
@@ -19,5 +20,15 @@ resource_pack:
 
 pipeline:
     - "mecha"
+    - "src.patch_json_indent"
     - "stewbeet.plugins.auto.headers.silent"
+    - "stewbeet.plugins.archive.silent"
+    - "stewbeet.plugins.copy_to_destination.silent"
+
+meta:
+    # StewBeet equivalent to "beet link" but copy zips instead
+    stewbeet:
+        build_copy_destinations:
+            datapack: ["D:/minecraft/latest/saves/Breakdown/datapacks"]
+            resource_pack: ["D:/minecraft/latest/resourcepacks"]
 

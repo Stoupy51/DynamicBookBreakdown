@@ -1,0 +1,5 @@
+{
+	"pools": [
+		{"rolls": 1,"entries": [{"type": "minecraft:item","name": "minecraft:written_book","functions": [{"function": "minecraft:set_components","components": {"minecraft:item_name": {"translate": "item.sticker_book.book"},"minecraft:item_model": "sticker_book:sticker_book","minecraft:custom_data": {"sticker_book": {}},"minecraft:enchantment_glint_override": false,"minecraft:rarity": "epic","minecraft:max_stack_size": 1,"!minecraft:written_book_content": {},"minecraft:tooltip_display": {"hidden_components": ["minecraft:written_book_content"]}}}]}]}
+	]
+}

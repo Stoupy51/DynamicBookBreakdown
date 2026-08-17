@@ -1,0 +1,11 @@
+{
+  "section_flip": {
+    "sounds": [
+      {
+        "name": "sticker_book:section_flip",
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.sticker_book.section_flip"
+  }
+}

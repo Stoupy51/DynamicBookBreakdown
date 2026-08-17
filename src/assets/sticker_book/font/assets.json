@@ -1,0 +1,448 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/cover.png",
+      "ascent": 11,
+      "height": 195,
+      "chars": [
+        "\ue000"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/tropics_page_left.png",
+      "ascent": 11,
+      "height": 195,
+      "chars": [
+        "\ue001"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/tropics_page_right.png",
+      "ascent": 11,
+      "height": 195,
+      "chars": [
+        "\ue002"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/plateaus_page_left.png",
+      "ascent": 11,
+      "height": 195,
+      "chars": [
+        "\ue003"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/plateaus_page_right.png",
+      "ascent": 11,
+      "height": 195,
+      "chars": [
+        "\ue004"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/front_tab_selected.png",
+      "ascent": -32,
+      "height": 14,
+      "chars": [
+        "\ue010"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/front_tab_idle.png",
+      "ascent": -32,
+      "height": 14,
+      "chars": [
+        "\ue011"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/tropics_tab_selected.png",
+      "ascent": -32,
+      "height": 14,
+      "chars": [
+        "\ue012"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/tropics_tab_idle.png",
+      "ascent": -32,
+      "height": 14,
+      "chars": [
+        "\ue013"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/plateaus_tab_selected.png",
+      "ascent": -32,
+      "height": 14,
+      "chars": [
+        "\ue014"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/plateaus_tab_idle.png",
+      "ascent": -32,
+      "height": 14,
+      "chars": [
+        "\ue015"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/previous_page.png",
+      "ascent": -12,
+      "height": 16,
+      "chars": [
+        "\ue020"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/next_page.png",
+      "ascent": -12,
+      "height": 16,
+      "chars": [
+        "\ue021"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/next_page_gold.png",
+      "ascent": -12,
+      "height": 16,
+      "chars": [
+        "\ue022"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/completion_sticker.png",
+      "ascent": 25,
+      "height": 40,
+      "chars": [
+        "\ue023"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:book/slot_locked.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue030"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/palm.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue100"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/sun.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue101"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/parrot.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue102"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/pineapple.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue103"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/fish.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue104"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/shell.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue105"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/crab.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue106"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/turtle.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue107"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/coconut.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue108"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/starfish.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue109"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/hibiscus.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue10a"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/coral.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue10b"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/dolphin.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue10c"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/lagoon.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue10d"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/tiki.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue10e"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/tropics/wave.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue10f"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/mesa.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue120"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/cactus.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue121"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/hawk.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue122"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/arch.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue123"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/campfire.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue124"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/boulder.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue125"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/lizard.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue126"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/tumbleweed.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue127"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/canyon.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue128"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/fossil.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue129"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/geode.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue12a"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/dust_devil.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue12b"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/coyote.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue12c"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/sage.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue12d"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/sunset.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue12e"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "sticker_book:sticker/plateaus/quarry.png",
+      "ascent": -1,
+      "height": 26,
+      "chars": [
+        "\ue12f"
+      ]
+    },
+    {
+      "type": "space",
+      "advances": {
+        "\ud000": -292,
+        "\ud001": 38,
+        "\ud002": 204,
+        "\ud003": 17,
+        "\ud004": 112,
+        "\ud005": 128,
+        "\ud006": 80
+      }
+    }
+  ]
+}

@@ -1,13 +1,15 @@
 {
-  "pack": {
-    "min_format": [
-      88,
-      0
-    ],
-    "max_format": [
-      88,
-      0
-    ],
-    "description": ""
-  }
+	"pack": {
+		"pack_format": 88,
+		"description": "DynamicBookBreakdown [] by ",
+		"min_format": [
+			88,
+			0
+		],
+		"max_format": [
+			1000,
+			0
+		]
+	},
+	"id": "dynamicbookbreakdown"
 }

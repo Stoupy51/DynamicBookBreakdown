@@ -1,0 +1,7 @@
+{
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "sticker_book:item/sticker_book",
+		"particle": "#layer0"
+	}
+}
