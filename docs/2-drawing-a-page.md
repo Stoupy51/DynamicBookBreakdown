@@ -49,7 +49,7 @@ Had we used 27 instead of 25 here, every row would sit eight pixels off across t
 
 You could put the whole page into the `dialog` command as one run of private use characters. Put it in the
 [lang file](https://minecraft.wiki/w/Resource_pack#Language) instead, and keep the command holding only
-what changes.
+what changes. The shipped templates are in [`en_us.json`](../build/resourcepack/assets/sticker_book/lang/en_us.json).
 
 ```json
 "gui.sticker_book.page.spread": "%1$s\ud000%2$s\n\n\n\n%3$s\ud001%4$s\n\n\n\n\n\n%5$s\ud001%6$s\n\n\n\n\n%7$s\n%8$s\n\n\n\n",
@@ -87,5 +87,8 @@ from the PNGs the game reads, so wrong geometry shows up as a wrong picture.
 ```sh
 python tools/preview_book.py docs/img
 ```
+
+The preview reads the same built font and language files shipped in
+[`build/resourcepack`](../build/resourcepack/).
 
 Next: [Part 3: The dialog](3-the-dialog.md).

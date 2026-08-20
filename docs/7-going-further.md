@@ -22,27 +22,24 @@ variant count: two entries is four variants, three is eight, four is sixteen.
 
 ## File map
 
-```
-src/
-  assets/sticker_book/
-    font/assets.json            page, tab, arrow and sticker glyphs, plus the space advances
-    font/toast.json             the toast background strip
-    font/advancement_text.json  the tall ascii sheet the entry font is cropped from
-    lang/en_us.json             the index page layouts and all visible text
-    textures/book/              pages, cover, tabs, arrows, the empty slot
-    textures/sticker/           one PNG per sticker
-  data/sticker_book/
-    advancement/                one file per spread, each holding one criterion per sticker
-    function/page/1..3/         cover and index spreads: check picks the state, dialog shows it
-    function/action/            the input handler behind the triggers
-    function/dev/               unlock_all, unlock_random_half, reset
-    predicate/                  has the book, is holding the book, coin flip
-  entry_pages/                  generator: pages 4 and up, the body font, the offset alphabet
-  patch_json_indent.py          readable JSON in the build output
-tools/
-  generate_stickers.py          rewrites the derived half of src/ from the sticker table
-  preview_book.py               renders any page to PNG, from src/ or from build/
-```
+| Built path | What it contains |
+|:--|:--|
+| [`font/assets.json`](../build/resourcepack/assets/sticker_book/font/assets.json) | Page, tab, arrow and sticker glyphs, plus the space advances |
+| [`font/toast.json`](../build/resourcepack/assets/sticker_book/font/toast.json) | The toast background strip |
+| [`font/advancement_text.json`](../build/resourcepack/assets/sticker_book/font/advancement_text.json) | The tall ASCII sheet used for entry text |
+| [`lang/en_us.json`](../build/resourcepack/assets/sticker_book/lang/en_us.json) | Index page layouts and all visible text |
+| [`textures/book/`](../build/resourcepack/assets/sticker_book/textures/book/) | Pages, cover, tabs, arrows and the empty slot |
+| [`textures/sticker/`](../build/resourcepack/assets/sticker_book/textures/sticker/) | One PNG per sticker |
+| [`advancement/`](../build/datapack/data/sticker_book/advancement/) | One file per spread, each holding one criterion per sticker |
+| [`function/page/`](../build/datapack/data/sticker_book/function/page/) | Cover, index spreads and generated entry pages |
+| [`function/action/`](../build/datapack/data/sticker_book/function/action/) | The input handler behind the triggers |
+| [`function/dev/`](../build/datapack/data/sticker_book/function/dev/) | `unlock_all`, `unlock_random_half`, `reset` |
+| [`predicate/`](../build/datapack/data/sticker_book/predicate/) | Has the book, is holding the book and coin flip |
+
+The generator source remains in [`entry_pages/`](../src/entry_pages/), alongside
+[`patch_json_indent.py`](../src/patch_json_indent.py). The standalone tools are
+[`generate_stickers.py`](../tools/generate_stickers.py) and
+[`preview_book.py`](../tools/preview_book.py).
 
 `assets/` and `data/` are an ordinary resource pack and datapack, and come back out that way in `build/`.
 Only `entry_pages/` and `patch_json_indent.py` are beet plugins.

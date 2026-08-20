@@ -8,7 +8,7 @@ below.
 
 ## The command
 
-`src/data/sticker_book/function/page/2/dialog.mcfunction`, down to its skeleton:
+[`page/2/dialog.mcfunction`](../build/datapack/data/sticker_book/function/page/2/dialog.mcfunction), down to its skeleton:
 
 ```mcfunction
 $dialog show @s { \
@@ -43,13 +43,13 @@ So every clickable thing in the book sets a number:
 click_event: {action: 'run_command', command: 'trigger sticker_book.action set 2'}
 ```
 
-And one line of `tick.mcfunction` picks it up at operator level:
+And one line of [`tick.mcfunction`](../build/datapack/data/sticker_book/function/tick.mcfunction) picks it up at operator level:
 
 ```mcfunction
 execute as @a[scores={sticker_book.action=1..}] at @s run function sticker_book:action/main
 ```
 
-`action/main.mcfunction` is the whole input handler:
+[`action/main.mcfunction`](../build/datapack/data/sticker_book/function/action/main.mcfunction) is the whole input handler:
 
 ```mcfunction
 # 1 = previous page, 2 = next page, 3 = close, 1x = jump to page x, 100+i = open entry i
@@ -70,7 +70,7 @@ trigger into the page score and subtracts 10, so a fourth spread needs no new co
 
 ## The redraw
 
-Change the page number, call `open` again, `open` shows the dialog again. Minecraft replaces the open
+Change the page number, call [`open.mcfunction`](../build/datapack/data/sticker_book/function/open.mcfunction) again, `open` shows the dialog again. Minecraft replaces the open
 window rather than stacking a second one, so from the player's side it reads as a page turn. `open` also
 re-arms the trigger, clamps the page against `$max` and plays the page turn sound.
 

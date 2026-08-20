@@ -73,6 +73,9 @@ execute unless entity @s[advancements={sticker_book:sticker/tropics={palm=true}}
 execute if     entity @s[advancements={sticker_book:sticker/tropics={palm=true}}] unless entity @s[advancements={sticker_book:sticker/tropics={sun=true}}] run function sticker_book:page/4/fl
 ```
 
+The generated variants are [`page/4/ll.mcfunction`](../build/datapack/data/sticker_book/function/page/4/ll.mcfunction) and
+[`page/4/fl.mcfunction`](../build/datapack/data/sticker_book/function/page/4/fl.mcfunction); the other two use the same naming scheme.
+
 32 entries, two per spread, four variants each: 64 generated dialogs and 16 checks, none of them yours to
 maintain. It also caps entries per spread, since three per page is eight variants and four is sixteen. Index
 pages avoid all of this because their slots are fixed width glyphs.
@@ -122,8 +125,8 @@ Three things connect it back to the hand written half:
 
 - Every index slot carries `trigger sticker_book.action set <100 + index>`. `action/open_entry` subtracts the
   base, divides by entries per page and adds the first entry page. No table, no function per entry.
-- The generated `sticker_book:entry/load` is added to the `#minecraft:load` function tag, raising `$max` from
-  3 to 19 so the page clamp lets you reach the new pages.
+- The generated [`entry/load.mcfunction`](../build/datapack/data/sticker_book/function/entry/load.mcfunction) is added to the
+  [`#minecraft:load` function tag](../build/datapack/data/minecraft/tags/function/load.json), raising `$max` from 3 to 19 so the page clamp lets you reach the new pages.
 - Locked slots are clickable too, so a player can read what they are missing. That is why the locked
   component moved from one shared value in `const.mcfunction` to one per slot: a shared component cannot
   carry a per-slot click event.

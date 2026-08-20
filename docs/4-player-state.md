@@ -15,7 +15,7 @@ One advancement per sticker works and means 32 near identical files. It is also 
 execute if entity @s[advancements={sticker_book:sticker/tropics={palm=true}}]
 ```
 
-`advancement/sticker/tropics.json`:
+[`advancement/sticker/tropics.json`](../build/datapack/data/sticker_book/advancement/sticker/tropics.json):
 
 ```json
 {
@@ -36,8 +36,8 @@ execute if entity @s[advancements={sticker_book:sticker/tropics={palm=true}}]
 ## What regrouping costs
 
 **The toast.** It fires on completion, not per criterion, so sixteen stickers sharing one advancement would
-toast once, at the end. So grant one deliberately: `sticker_book:toast` carries nothing but a display, and
-`on_sticker_found` revokes it before granting so the same one fires again.
+toast once, at the end. So grant one deliberately: [`sticker_book:toast`](../build/datapack/data/sticker_book/advancement/toast.json) carries nothing but a display, and
+[`on_sticker_found.mcfunction`](../build/datapack/data/sticker_book/function/on_sticker_found.mcfunction) revokes it before granting so the same one fires again.
 
 ```mcfunction
 # Revoking first is what lets the same advancement toast again on the next sticker
@@ -54,7 +54,7 @@ is a text component.
 
 ## The unlock path
 
-One entry point for the rest of the pack:
+[`unlock.mcfunction`](../build/datapack/data/sticker_book/function/unlock.mcfunction) is one entry point for the rest of the pack:
 
 ```mcfunction
 # function sticker_book:unlock {spread:"tropics",sticker:"palm"}
@@ -88,6 +88,8 @@ execute if entity @s[advancements={sticker_book:sticker/tropics={palm=true}}] ru
 function sticker_book:page/2/dialog with storage sticker_book:temp page
 ```
 
+The complete built implementation is [`page/2/check.mcfunction`](../build/datapack/data/sticker_book/function/page/2/check.mcfunction), including all sixteen slot checks.
+
 The locked page is built once at load time in `const.mcfunction`, so the common case is one `data modify`
 instead of sixteen.
 
@@ -102,9 +104,9 @@ Sixteen `execute if entity` per open is nothing: once, on one player, never on t
 
 | Function | What it does |
 |:--|:--|
-| `dev/unlock_all` | `advancement grant @s from sticker_book:root`, every criterion at once |
-| `dev/unlock_random_half` | Flips a coin per sticker against a `random_chance` predicate |
-| `dev/reset` | `advancement revoke @s from sticker_book:root` |
+| [`dev/unlock_all`](../build/datapack/data/sticker_book/function/dev/unlock_all.mcfunction) | `advancement grant @s from sticker_book:root`, every criterion at once |
+| [`dev/unlock_random_half`](../build/datapack/data/sticker_book/function/dev/unlock_random_half.mcfunction) | Flips a coin per sticker against a `random_chance` predicate |
+| [`dev/reset`](../build/datapack/data/sticker_book/function/dev/reset.mcfunction) | `advancement revoke @s from sticker_book:root` |
 
 `unlock_random_half` is the useful one. All or nothing only ever shows two states; a random half puts every
 index page in a partly filled state and hits all four entry page variants from Part 6 in one run.

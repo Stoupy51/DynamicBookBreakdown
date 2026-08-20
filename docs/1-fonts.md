@@ -7,7 +7,8 @@ what `height` and `ascent` do, and where the advance comes from. Reference:
 
 ## A font is a list of providers
 
-A font lives at `assets/<namespace>/font/<name>.json` and is a stack of providers:
+A font lives at `assets/<namespace>/font/<name>.json` and is a stack of providers. The shipped font is
+[`assets.json`](../build/resourcepack/assets/sticker_book/font/assets.json):
 
 ```json
 {"providers": [ {"type": "bitmap", "...": "..."}, {"type": "reference", "id": "minecraft:include/default"} ]}
@@ -103,6 +104,8 @@ spine, eight across a spread.
 ```json
 {"type": "space", "advances": {"\ud000": -292, "\ud001": 47}}
 ```
+
+The complete set of page, slot and offset providers is in [`assets.json`](../build/resourcepack/assets/sticker_book/font/assets.json).
 
 Characters that draw nothing and move the cursor by exactly that value. No image, no `+1`. Negative values
 move it backwards, which is what lets you draw two things on top of each other, or draw the right page first
