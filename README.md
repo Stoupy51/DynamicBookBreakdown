@@ -6,6 +6,8 @@ built out of a font, a dialog and a handful of advancements.
 
 ![The cover](docs/img/dialog_window.png)
 
+(credits for the Summit assets: https://modrinth.com/user/Psydoux)
+
 ![A spread, eight of sixteen stickers found](docs/img/tooltip.png)
 
 This repository is a self-contained rebuild of the Smithed Summit sticker book, stripped of everything
